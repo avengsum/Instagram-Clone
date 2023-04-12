@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Home2 from '../assets/image/home.png';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -22,6 +22,12 @@ const Login = () => {
     },
   });
 
+  const [varient,setVarient] = useState('login');
+
+  const toggleVarient = useCallback(() => {
+    setVarient((current) => current === 'login' ? 'register' : 'login')
+  },[])
+
   return (
     <div className="bg-[url('./assets/image/bg.jfif')] bg-cover flex items-center justify-center min-h-screen">
       <div className="hidden lg:block lg:w-1/2">
@@ -31,6 +37,9 @@ const Login = () => {
         <h1 className="text-4xl font-bold mb-4">Instagram</h1>
         <form onSubmit={formik.handleSubmit}>
           <div className="mb-4">
+            <h1 className='font-bold text-4xl mb-4'>{varient === 'login' ? "Login" : "Register" }</h1>
+            {varient === 'register' && (
+            <div>
             <label htmlFor="fullName" className="block text-gray-700 font-bold mb-2">
               Full Name
             </label>
@@ -44,7 +53,9 @@ const Login = () => {
             />
             {formik.touched.fullName && formik.errors.fullName ?
             <div>{formik.errors.fullName}</div> : null }
-          </div>
+          </div> )}
+          </div> 
+          
           <div className="mb-4">
             <label htmlFor="email" className="block text-gray-700 font-bold mb-2">
               Email
@@ -57,6 +68,7 @@ const Login = () => {
               value={formik.values.email}
               className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
+            
             {formik.touched.email && formik.errors.email ? (
               <div>{formik.errors.email}</div>
             ) : null}
@@ -84,7 +96,8 @@ const Login = () => {
             Submit
           </button>
           <div className='mt-5'>
-            <p  className='inline-block'>Don't have an account?</p><span className='text-white cursor-pointer' > Sign up</span>
+            <p  className='inline-block'>{varient === 'login' ? "New to Instagram ?" : "Have an account ?" }</p>
+            <span onClick={toggleVarient} className='text-white cursor-pointer' >{varient === 'login' ? ' Sign up' : ' Login'} </span>
           </div>
         </form>
       </div>
